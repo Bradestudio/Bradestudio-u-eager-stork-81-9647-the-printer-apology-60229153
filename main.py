@@ -25,6 +25,11 @@ def main():
     path = os.path.join(out_dir, "entry.txt")
     with open(path, "w", encoding="utf-8", newline="") as fh:
         fh.write(line)
+    # Read back and verify byte-exact: one line, <=120 chars, no newline.
+    with open(path, "rb") as fh:
+        raw = fh.read()
+    assert raw.decode("utf-8") == line, "entry.txt does not match ENTRY"
+    assert not raw.endswith(b"\n"), "entry.txt must not end with a newline"
 
 
 if __name__ == "__main__":
